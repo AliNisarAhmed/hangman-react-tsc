@@ -4,14 +4,14 @@ export default class WrongLetters extends Component {
   render() {
     const { wrongLetters } = this.props;
     return (
-      <div>
-        WRong letters would be displayed here...
+      <div className="wrongLetters">
+        <h4>Wrong letters:</h4>
         <p>
           {wrongLetters && wrongLetters.map((wrongLetter, i, arr) => {
             if (i === arr.length - 1) {
-              return ` ${wrongLetter}`
+              return <span>{` ${wrongLetter}`}</span>
             } else {
-              return `${wrongLetter}, `;
+              return <span>{`${wrongLetter}, `}</span>;
             }
           })}
         </p>
