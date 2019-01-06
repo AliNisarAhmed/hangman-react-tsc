@@ -4,5 +4,17 @@ export default [
   'propose',
   'marriage',
   'delinquent',
-  'wonderful'
+  'wonderful',
+  "master",
+  "jeans",
+  "computer",
+  "sleep",
+  "ceiling",
+  "software",
+  "government",
+  "disorder",
+  "freedom",
+  "majestic",
+  "frivolous",
+  "upgrade",
 ]

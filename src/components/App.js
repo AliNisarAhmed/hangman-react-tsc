@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import classNames from 'classnames';
 
 import WordDisplay from './WordDisplay';
 import WrongLetters from './WrongLetters';
@@ -16,7 +17,8 @@ class App extends Component {
     wrongLetters: [], // will include the wrong guesses by the user
     guess: '',  // the current guess by the user, value of the input field
     guessesLeft: 5,
-    message: 'Take a guess',
+    message: 'Try guessing a letter',
+    gameEnded: false,
   }
 
   componentDidMount() {
@@ -45,17 +47,40 @@ class App extends Component {
   checkGuess = (guess) => {
     // This checks whether the guessed letter is correct 
     let wordArr = this.state.word.map(letterObj => letterObj.letter);  // here we trarnsform each letterObj to letter
-    if (wordArr.includes(guess)) {
+    if (wordArr.includes(guess)) {  // correct guess
       this.displayWord(guess);
-    } else if (this.state.wrongLetters.includes(guess)) {
+    } else if (this.state.wrongLetters.includes(guess)) {  // repeating an already used letter
       this.setState({message: 'You have already used this word'});
       setTimeout(() => this.setState({message: "Try a letter which you have'nt already used"}), 1500)
-    } else {
+    } else {  // wrong guess
       this.setState((prevState) => 
       ({
         wrongLetters: [...prevState.wrongLetters, guess], 
         guessesLeft: prevState.guessesLeft - 1
-      }));
+      }), this.checkForLoss);
+    }
+  }
+
+  checkForWin = () => {
+    let isShowingArr = this.state.word.map(letterObj => letterObj.isShowing);
+    if (isShowingArr.every(bool => bool)) {
+      this.setState({
+        message: `You won with ${this.state.guessesLeft} guesses left!!!`,
+        gameEnded: true
+      });
+    }
+  }
+
+  checkForLoss = () => {
+    console.log('checking for loss');
+    if (this.state.guessesLeft === 0) {
+      this.setState(() => ({message: 'You lost!!!', gameEnded: true}));
+      setTimeout(() => {
+        this.setState((prevState) => ({
+          message: 'The correct word was...',
+          word: prevState.word.map(letterObj => ({...letterObj, isShowing: true})),
+        }))
+      }, 1500);
     }
   }
   
@@ -73,35 +98,57 @@ class App extends Component {
           return letterObj;
         }
       })
-    }));
+    }), this.checkForWin);
   }
 
   resetGame = () => {
     let word = generateRandomWord(words, this.state.word.map(letterObj => letterObj.letter).join(''));
-    console.log(word);
     let letterObjectArr = mapToLetterObject(word);
     this.setState({
       word: letterObjectArr,
       wrongLetters: [], 
       guess: '',  
       guessesLeft: 5,
-      message: 'Take a guess'
+      message: 'Take a guess',
+      gameEnded: false
     });
     this.input.focus();
   }
 
   render() {
+    const buttonClass = classNames({
+      btn: !this.state.gameEnded,
+      callToAction: this.state.gameEnded
+    });
+    const msgClass = classNames({
+      msg: true,
+      gold: this.state.guessesLeft !== 0 && this.state.gameEnded,
+      red: this.state.guessesLeft === 0
+    })
     return (
       <div className="App">
-        <h1>Hangman Game</h1>
-        <p>{this.state.message}</p>
+        <h1 id="title">Hangman Game</h1>
+
+        <div className={msgClass}>
+          <p>{this.state.message}</p>
+        </div>
+        
         <WordDisplay word={this.state.word}/>
+        
         <WrongLetters wrongLetters={this.state.wrongLetters}/>
-        <p>Guesses Left: {this.state.guessesLeft}</p>
+        
+        <div className="guessesLeft">
+        {
+          !this.state.gameEnded &&
+            <p>Guesses Left: {this.state.guessesLeft}</p>
+        }
+        </div>
+          
         <form onSubmit={this.onGuessSubmit}>
-          <input ref={el => this.input = el} type="text" value={this.state.guess} onChange={this.handleInputChange} name="guess" required/>
+          <input ref={el => this.input = el} type="text" value={this.state.guess} onChange={this.handleInputChange} name="guess" required disabled={this.state.gameEnded ? true: false} autoComplete="false"/>
         </form>
-        <button onClick={this.resetGame}>New Word?</button>
+        
+        <button onClick={this.resetGame} className={buttonClass}>New Word?</button>
       </div>
     );
   }

@@ -17,8 +17,10 @@ body {
   background-color: $color-black;
   max-width: 100vw;
   margin: 0 auto;
-  display: flex;
+  padding-bottom: 40px;
+  box-sizing: border-box;
 
+  display: flex;
   flex-flow: column;
   justify-content: center;
   align-items: center;
@@ -33,15 +35,26 @@ body {
     width: 40px;
     text-align: center;
     margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid $color-gold;
   }
+}
+
+#title {
+  text-align: center;
+  margin-bottom: auto;
 }
 
 .wordDisplay {
   color: $color-gold;
   font-size: 40px;
+  margin-top: 40px;
+  text-align: center;
+  transition: all .2s;
 
   .letter {
-    width: 20px;
+    display: inline-block;
+    width: 35px;
     border-bottom: 1px solid $color-gold;
     margin: 5px;
     padding-bottom: 10px;
@@ -51,23 +64,77 @@ body {
 .wrongLetters {
   color: $color-red;
   font-size: 20px;
-}
+  margin-top: 25px;
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+  &__heading {
+  }
+
+  &__container {
+    height: 30px;
+    text-align: center;
+  }
+
+  &__text {
+    font-size: 24px;
+  }
 }
 
 button {
   background-color: $color-black;
   border: none;
   outline: none;
-  color: white;
   cursor: pointer;
+}
+
+.btn {
+  color: white;
   font-size: 15px;
+  transition: all .2s;
 
   &:hover, &:active {
     color: $color-gold;
-    transform: scale(1.1);
+    transform: scale(1.3);
   }
+}
+
+.guessesLeft {
+  text-align: center;
+  height: 40px;
+  p {
+    margin: 0;
+  }
+}
+
+.callToAction {
+  color: $color-gold; 
+  transition: all .1s;
+  animation: cta 1s linear infinite backwards;
+
+  &:hover {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes cta {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.5); }
+  100% { transform: scale(1); }
+}
+
+.msg {
+  height: 35px;
+  
+  p {
+    margin: 0;
+  }
+}
+
+.gold {
+  color: $color-gold;
+  transform: scale(1.2);
+}
+
+.red {
+  color: $color-red;
+  transform: scale(1.2);
 }

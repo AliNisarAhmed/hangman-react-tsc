@@ -4,11 +4,11 @@ export default class WordDisplay extends Component {
   render() {
     return (
       <div className="wordDisplay">
-        {this.props.word.map(letterObj => {
+        {this.props.word.map((letterObj, i) => {
           if (!letterObj.isShowing) {
-            return <span className="letter">{'*'}</span>;
+            return <span key={letterObj.letter + i} className="letter">{'*'}</span>;
           } else {
-            return <span className="letter">{`${letterObj.letter}`}</span>;
+            return <span key={letterObj.letter + i} className="letter">{`${letterObj.letter}`}</span>;
           }
         })}
       </div>

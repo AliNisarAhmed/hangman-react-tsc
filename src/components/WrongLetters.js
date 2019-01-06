@@ -5,16 +5,20 @@ export default class WrongLetters extends Component {
     const { wrongLetters } = this.props;
     return (
       <div className="wrongLetters">
-        <h4>Wrong letters:</h4>
-        <p>
-          {wrongLetters && wrongLetters.map((wrongLetter, i, arr) => {
-            if (i === arr.length - 1) {
-              return <span>{` ${wrongLetter}`}</span>
-            } else {
-              return <span>{`${wrongLetter}, `}</span>;
+        <h4 className="wrongLetters__heading">Wrong letters:</h4>
+        <div className="wrongLetters__container">
+          <p className="wrongLetters__text">
+            {
+              wrongLetters && wrongLetters.map((wrongLetter, i, arr) => {
+                if (i === arr.length - 1) {
+                  return <span key={`${wrongLetter}${i}`}>{` ${wrongLetter}`}</span>
+                } else {
+                  return <span key={`${wrongLetter}${i}`}>{`${wrongLetter}, `}</span>;
+                }
+              })
             }
-          })}
-        </p>
+          </p>
+        </div>
       </div>
     )
   }
