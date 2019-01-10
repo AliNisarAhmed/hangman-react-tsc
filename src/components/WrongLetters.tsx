@@ -1,6 +1,10 @@
 import React, { Component } from 'react'
 
-export default class WrongLetters extends Component {
+interface WrongLetterProps {
+  wrongLetters: string[];
+}
+
+export default class WrongLetters extends Component<WrongLetterProps> {
   render() {
     const { wrongLetters } = this.props;
     return (

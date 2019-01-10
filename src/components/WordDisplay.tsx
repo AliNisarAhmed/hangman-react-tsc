@@ -1,6 +1,13 @@
 import React, { Component } from 'react'
+import ILetterObj from '../interfaces/ILetterObj';
 
-export default class WordDisplay extends Component {
+interface WordDisplayProps {
+  word: ILetterObj[];
+}
+
+
+
+export default class WordDisplay extends Component<WordDisplayProps> {
   render() {
     return (
       <div className="wordDisplay">

@@ -1,4 +1,4 @@
-export default function generateRandomWord(arr, word) {
+export default function generateRandomWord(arr: string[], word ?: string): string {
   let random = Math.floor(Math.random() * arr.length);
   while (word && arr[random] === word) {
     random = Math.floor(Math.random() * arr.length);

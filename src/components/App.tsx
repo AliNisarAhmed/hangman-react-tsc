@@ -8,8 +8,25 @@ import words from '../words';
 import generateRandomWord from '../helperFunctions/generateRandomWord';
 import mapToLetterObject from '../helperFunctions/mapToLetterObject';
 
-class App extends Component {
-  state = {
+import ILetterObj from '../interfaces/ILetterObj';
+
+interface AppState {
+  word: ILetterObj[];
+  wrongLetters: string[];
+  guess: string;
+  guessesLeft: number;
+  message: string;
+  gameEnded: boolean;
+}
+
+interface AppProps {
+
+}
+
+class App extends Component<AppProps, AppState> {
+  input: any = null;
+
+  state: AppState = {
     // each word string (whether from the server or locally) will be split into an array of objects
     // where each object = { letter: 'a', isShowing: false }
     // This object will henceforth be referred to as 'letterObject'
@@ -28,23 +45,24 @@ class App extends Component {
     this.setState({word: letterObjectArr}); 
   }
 
-  handleInputChange = (e) => {
-    let value = e.target.value.toLowerCase();
+  handleInputChange = (e: React.FormEvent<HTMLInputElement>): void => {
+    let value = e.currentTarget.value.toLowerCase();
     if (/^[a-z]{0,1}$/.test(value) && value.length <= 1) {
       this.setState({
-        [e.target.name]: value
+        ...this.state,
+        [e.currentTarget.name]: value
       });
     }
   }
 
-  onGuessSubmit = (e) => {
+  onGuessSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     // this function fires when the user submits his guess
     e.preventDefault();
     this.checkGuess(this.state.guess);
     this.setState({guess: ''});
   }
 
-  checkGuess = (guess) => {
+  checkGuess = (guess: string): void => {
     // This checks whether the guessed letter is correct 
     let wordArr = this.state.word.map(letterObj => letterObj.letter);  // here we trarnsform each letterObj to letter
     if (wordArr.includes(guess)) {  // correct guess
@@ -61,7 +79,7 @@ class App extends Component {
     }
   }
 
-  checkForWin = () => {
+  checkForWin = (): void => {
     let isShowingArr = this.state.word.map(letterObj => letterObj.isShowing);
     if (isShowingArr.every(bool => bool)) {
       this.setState({
@@ -71,7 +89,7 @@ class App extends Component {
     }
   }
 
-  checkForLoss = () => {
+  checkForLoss = (): void => {
     console.log('checking for loss');
     if (this.state.guessesLeft === 0) {
       this.setState(() => ({message: 'You lost!!!', gameEnded: true}));
@@ -84,7 +102,7 @@ class App extends Component {
     }
   }
   
-  displayWord = (guess) => {
+  displayWord = (guess: string) => {
     // this function fires when the user has guessed correctly
     // its main job is to find all instances of that letter & make truthy their isShowing
     this.setState((state) => ({
@@ -101,7 +119,7 @@ class App extends Component {
     }), this.checkForWin);
   }
 
-  resetGame = () => {
+  resetGame = ():void => {
     let word = generateRandomWord(words, this.state.word.map(letterObj => letterObj.letter).join(''));
     let letterObjectArr = mapToLetterObject(word);
     this.setState({
